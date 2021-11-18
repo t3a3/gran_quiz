@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="jp">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./css/main.css">
+</head>
+
+<body>
+  <div class="quiz-content" id="fullOverlay">
+    <div class="item">
+      <h1 class="quiz_title">グランアレグリア号問題</h1>
+      <img src="img/gran.jpg" alt="">
+      <p>2021/11/18(日)に行われるマイルＣＳにて、<br>グランアレグリア号が引退することになりました。<br>ありがとうグランアレグリア!</p>
+      <div class="start_box">
+        <button class="start_btn" id="start_btn">開始</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="popup">
+    <div class="content">
+      <p>結果</p>
+      <h2 id="total_text"></h2>
+      <button id="close">閉じる</button>
+    </div>
+  </div>
+
+  <div class="popup2">
+    <div class="content2">
+      <p id="result"></p>
+      <h2 id="takata_result_text1"></h2>
+      <h2 id="takata_result_text2"></h2>
+      <h2 id="takata_result_text3"></h2>
+      <button id="close2">閉じる</button>
+    </div>
+  </div>
+
+  <h1>グランアレグリア号問題</h1>
+  <div id="answer_main">
+    <p id="quiz_no"></p>
+    <p id="question"></p>
+    <ul id="answer_box">
+      <li><button id="answer00">0</button></li>
+      <li><button id="answer01">1</button></li>
+      <li><button id="answer02">2</button></li>
+    </ul>
+  </div>
+  <button id="result_btn">結果を見る</button>
+
+  <p id="takata_text"></p>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+  <script>
+    let quiz_cnt = 0;
+    var uma_point = 0;
+    let thiscount = $("#quiz_no").html();
+
+    $("#result_btn").hide();
+
+    $("#start_btn").on("click", function () {
+      $('#fullOverlay').css({
+        'display': 'none',
+        'z-index': -1
+      });
+    });
+
+    const quiz = [
+      {
+        quiz_no: "第１問",
+        question: 'グランアレグリアの父は？',
+        answers: ['ディープインパクト', 'タピッツフライ', 'キングカメハメハ'],
+        correct: 0,
+        correct2: 1,
+        comment1: "偉大なる無敗三冠馬、近代競馬の最高傑作!!",
+        comment2: "母がタピッツフライです",
+        comment3: "キンカメ産駒……好きです",
+      },
+      {
+        quiz_no: "第２問",
+        question: 'グランアレグリアの主戦騎手は？',
+        answers: ['M.デムーロ', 'C.ルメール', '池添謙一'],
+        correct: 1,
+        correct2: 2,
+        comment1: "今年のルメールはめっちゃ強い！",
+        comment2: "グランアレグリアに２度騎乗したことあり！",
+        comment3: "あの最敬礼が忘れられない……",
+      },
+      {
+        quiz_no: "第３問",
+        question: 'グランアレグリアの得意距離は？',
+        answers: ['中距離', 'マイル', '長距離'],
+        correct: 1,
+        correct2: 0,
+        comment1: "マイルの女王、グランアレグリア!!短距離も強し!!",
+        comment2: "超えられない2000mの壁、でも掲示板外したことなし！",
+        comment3: "走ったことすらない……",
+      },
+      {
+        quiz_no: "第４問",
+        question: '2020年安田記念、グランアレグリアに負けて２着だった馬は？',
+        answers: ['アーモンドアイ', 'クロノジェネシス', 'インディチャンプ'],
+        correct: 0,
+        correct2: 2,
+        comment1: "日本競馬唯一の９冠馬、アーモンドアイ！",
+        comment2: "インディチャンプは３着の馬の名でした！",
+        comment3: "ちなみにグランとクロノは同期の馬なのです！",
+      },
+      {
+        quiz_no: "第５問",
+        question: '今までグランアレグリアが勝ったＧ１の回数は？',
+        answers: ['７', '６', '５'],
+        correct: 2,
+        correct2: 1,
+        comment1: "５回もＧ１勝つなんて凄すぎる！",
+        comment2: "もしラストラン勝てば６！お願い、勝ってグランアレグリア！",
+        comment3: "正解は５。今のところは……",
+      },
+    ];
+    //  結果記録用の配列を用意
+    const result = [];
+
+    //  選択肢の表示
+    $("#quiz_no").text(quiz[result.length].quiz_no);
+    $("#question").text(quiz[result.length].question);
+    $("#takata_result_text1").text(quiz[result.length].comment1);
+    $("#takata_result_text2").text(quiz[result.length].comment2);
+    $("#takata_result_text3").text(quiz[result.length].comment3);
+    $("#answer00").text(quiz[result.length].answers[0]);
+    $("#answer01").text(quiz[result.length].answers[1]);
+    $("#answer02").text(quiz[result.length].answers[2]);
+
+
+    // `value`の設定
+    $("#answer00").val(0);
+    $("#answer01").val(1);
+    $("#answer02").val(2);
+
+    //
+    $("#answer_box").on("click", function (e) {
+      //正解、不正解判定
+      if (Number(e.target.value) === quiz[result.length].correct) {
+        quiz_cnt++;
+        uma_point = uma_point + 2;
+        result.push("2");
+        console.log(uma_point);
+        $("#result").text("正解！");
+        $("#takata_result_text2").hide();
+        $("#takata_result_text3").hide();
+        $('.popup2').addClass('show2').fadeIn();
+      }
+      else if (Number(e.target.value) === quiz[result.length].correct2) {
+        quiz_cnt++;
+        uma_point = uma_point + 1;
+        result.push("1");
+        console.log(uma_point);
+        $("#result").text("おしい！");
+        $("#takata_result_text1").hide();
+        $("#takata_result_text3").hide();
+        $('.popup2').addClass('show2').fadeIn();
+      } else {
+        quiz_cnt++;
+        console.log(uma_point);
+        result.push("0");
+        $("#result").text("不正解！");
+        $("#takata_result_text1").hide();
+        $("#takata_result_text2").hide();
+        $('.popup2').addClass('show2').fadeIn();
+      }
+      if (quiz_cnt == quiz.length) {
+        $("#answer_main").hide();
+        $("#result_btn").show();
+      };
+    });
+    // 問題文と選択肢を更新
+    $('#close2').on('click', function () {
+      $('.popup2').hide();
+      $("#takata_result_text1").show();
+      $("#takata_result_text2").show();
+      $("#takata_result_text3").show();
+      $("#quiz_no").text(quiz[result.length].quiz_no);
+      $("#question").text(quiz[result.length].question);
+      $("#takata_result_text1").text(quiz[result.length].comment1);
+      $("#takata_result_text2").text(quiz[result.length].comment2);
+      $("#takata_result_text3").text(quiz[result.length].comment3);
+      $("#answer00").text(quiz[result.length].answers[0]);
+      $("#answer01").text(quiz[result.length].answers[1]);
+      $("#answer02").text(quiz[result.length].answers[2]);
+    });
+
+    $('#result_btn').on('click', function () {
+      $('.popup').addClass('show').fadeIn();
+      if (uma_point >= 7) {
+        $("#total_text").text("あなたはグランアレグリア号知識王！");
+      } else if (uma_point >= 4 && uma_point < 7) {
+        $("#total_text").text("あなたはグランアレグリア号ファン！");
+      } else {
+        $("#total_text").text("あなたはグランアレグリア号にわか");
+      }
+    });
+
+    $('#close').on('click', function () {
+      $('.popup').fadeOut();
+    });
+
+  </script>
+
+</body>
+
+</html>
