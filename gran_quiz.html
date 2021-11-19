@@ -10,6 +10,7 @@
 </head>
 
 <body>
+  <!--開始画面-->
   <div class="quiz-content" id="fullOverlay">
     <div class="item">
       <h1 class="quiz_title">グランアレグリア号問題</h1>
@@ -20,25 +21,7 @@
       </div>
     </div>
   </div>
-
-  <div class="popup">
-    <div class="content">
-      <p>結果</p>
-      <h2 id="total_text"></h2>
-      <button id="close">閉じる</button>
-    </div>
-  </div>
-
-  <div class="popup2">
-    <div class="content2">
-      <p id="result"></p>
-      <h2 id="takata_result_text1"></h2>
-      <h2 id="takata_result_text2"></h2>
-      <h2 id="takata_result_text3"></h2>
-      <button id="close2">閉じる</button>
-    </div>
-  </div>
-
+  <!--問題画面-->
   <h1>グランアレグリア号問題</h1>
   <div id="answer_main">
     <p id="quiz_no"></p>
@@ -50,25 +33,32 @@
     </ul>
   </div>
   <button id="result_btn">結果を見る</button>
-
-  <p id="takata_text"></p>
-
+  <!--問題解説画面-->
+  <div class="popup2">
+    <div class="content2">
+      <p id="result"></p>
+      <h2 id="takata_result_text1"></h2>
+      <h2 id="takata_result_text2"></h2>
+      <h2 id="takata_result_text3"></h2>
+      <button id="close2">閉じる</button>
+    </div>
+  </div>
+  <!--結果画面-->
+  <div class="popup">
+    <div class="content">
+      <p>結果</p>
+      <h2 id="total_text"></h2>
+      <button id="close">閉じる</button>
+    </div>
+  </div>
+  <!-----------------ジャバスクリプト---------------->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
   <script>
     let quiz_cnt = 0;
     var uma_point = 0;
     let thiscount = $("#quiz_no").html();
-
-    $("#result_btn").hide();
-
-    $("#start_btn").on("click", function () {
-      $('#fullOverlay').css({
-        'display': 'none',
-        'z-index': -1
-      });
-    });
-
+    //クイズ内容
     const quiz = [
       {
         quiz_no: "第１問",
@@ -117,7 +107,7 @@
         correct: 2,
         correct2: 1,
         comment1: "５回もＧ１勝つなんて凄すぎる！",
-        comment2: "もしラストラン勝てば６！お願い、勝ってグランアレグリア！",
+        comment2: "もしラストラン勝てば６！",
         comment3: "正解は５。今のところは……",
       },
     ];
@@ -134,7 +124,6 @@
     $("#answer01").text(quiz[result.length].answers[1]);
     $("#answer02").text(quiz[result.length].answers[2]);
 
-
     // `value`の設定
     $("#answer00").val(0);
     $("#answer01").val(1);
@@ -149,6 +138,7 @@
         result.push("2");
         console.log(uma_point);
         $("#result").text("正解！");
+        $("#result").css("color", "red");
         $("#takata_result_text2").hide();
         $("#takata_result_text3").hide();
         $('.popup2').addClass('show2').fadeIn();
@@ -159,6 +149,7 @@
         result.push("1");
         console.log(uma_point);
         $("#result").text("おしい！");
+        $("#result").css("color", "black");
         $("#takata_result_text1").hide();
         $("#takata_result_text3").hide();
         $('.popup2').addClass('show2').fadeIn();
@@ -167,6 +158,7 @@
         console.log(uma_point);
         result.push("0");
         $("#result").text("不正解！");
+        $("#result").css("color", "blue");
         $("#takata_result_text1").hide();
         $("#takata_result_text2").hide();
         $('.popup2').addClass('show2').fadeIn();
@@ -192,17 +184,27 @@
       $("#answer02").text(quiz[result.length].answers[2]);
     });
 
+    //「結果を見る」を非表示
+    $("#result_btn").hide();
+    //最初のメニュー画面
+    $("#start_btn").on("click", function () {
+      $('#fullOverlay').css({
+        'display': 'none',
+        'z-index': -1
+      });
+    });
+    //結果内容表示
     $('#result_btn').on('click', function () {
       $('.popup').addClass('show').fadeIn();
       if (uma_point >= 7) {
-        $("#total_text").text("あなたはグランアレグリア号知識王！");
-      } else if (uma_point >= 4 && uma_point < 7) {
+        $("#total_text").text("あなたはグランアレグリア知識王！");
+      } else if (uma_point >= 5 && uma_point < 7) {
         $("#total_text").text("あなたはグランアレグリア号ファン！");
       } else {
         $("#total_text").text("あなたはグランアレグリア号にわか");
       }
     });
-
+    //問題回答のポップアップを消す
     $('#close').on('click', function () {
       $('.popup').fadeOut();
     });
